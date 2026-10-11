@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grasshopper Acres | Off Grid Bell Tent Farm Stay in Cedarville, MD</title>
+<meta name="description" content="A private four season bell tent on a quiet 10 acre farm in Cedarville, Maryland. Wood stove, two fire pits, dark skies, sleeps 10. About an hour from DC and Baltimore.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{
+  --canvas:#F4EEE2;
+  --paper:#FBF8F1;
+  --ink:#1E2419;
+  --ink-soft:#4A5244;
+  --moss:#4F5D2F;
+  --moss-deep:#36411F;
+  --grass:#8BA446;
+  --ember:#D98E32;
+  --ember-soft:#F6E2C4;
+  --bark:#5B4330;
+  --night:#161B14;
+  --line:rgba(30,36,25,.12);
+  --radius:22px;
+  --shadow:0 18px 40px -18px rgba(30,36,25,.35);
+  --ease:cubic-bezier(.22,.8,.26,1);
+  --head:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Figtree",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{font-family:var(--body);background:var(--canvas);color:var(--ink);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ember);outline-offset:3px;border-radius:8px}
+.wrap{width:min(1200px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:var(--head);line-height:1.05;letter-spacing:-.02em}
+h2{font-size:clamp(2rem,4.4vw,3.3rem);font-weight:800}
+h3{font-size:1.3rem;font-weight:800}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--moss)}
+.eyebrow i{color:var(--ember)}
+.lead{font-size:1.1rem;color:var(--ink-soft);max-width:56ch}
+section{padding:110px 0}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 26px;border-radius:999px;border:0;cursor:pointer;font-weight:700;font-size:1rem;transition:transform .3s var(--ease),background .3s,box-shadow .3s,color .3s}
+.btn-ember{background:var(--ember);color:var(--night)}
+.btn-ember:hover{background:#E9A04A;transform:translateY(-2px);box-shadow:0 12px 24px -10px rgba(217,142,50,.7)}
+.btn-moss{background:var(--moss);color:var(--paper)}
+.btn-moss:hover{background:var(--moss-deep);transform:translateY(-2px)}
+.btn-ghost{background:transparent;border:2px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--moss);color:var(--moss)}
+.btn i{transition:transform .3s var(--ease)}
+.btn:hover i.fa-arrow-right{transform:translateX(4px)}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .35s,box-shadow .35s,padding .35s;padding:18px 0}
+.nav.scrolled{background:rgba(251,248,241,.94);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line);padding:10px 0}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:800;font-size:1.25rem;color:var(--paper);transition:color .35s}
+.logo span.mark{width:38px;height:38px;border-radius:12px;background:var(--grass);display:grid;place-items:center;color:var(--night);font-size:1rem}
+.nav.scrolled .logo{color:var(--ink)}
+.nav-links{display:flex;align-items:center;gap:6px;list-style:none}
+.nav-links a{padding:9px 14px;border-radius:999px;font-weight:600;font-size:.95rem;color:rgba(251,248,241,.9);transition:background .25s,color .25s}
+.nav-links a:hover{background:rgba(255,255,255,.14)}
+.nav.scrolled .nav-links a{color:var(--ink-soft)}
+.nav.scrolled .nav-links a:hover{background:rgba(79,93,47,.1);color:var(--moss)}
+.nav-links .btn{padding:11px 20px;margin-left:8px}
+.nav.scrolled .nav-links .btn{color:var(--night)}
+.burger{display:none;width:46px;height:46px;border-radius:14px;border:0;background:rgba(255,255,255,.16);color:var(--paper);font-size:1.15rem;cursor:pointer}
+.nav.scrolled .burger{background:rgba(79,93,47,.1);color:var(--ink)}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;color:var(--paper);padding:140px 0 150px;isolation:isolate;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);animation:heroZoom 2.2s var(--ease) forwards}
+@keyframes heroZoom{to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(22,27,20,.55) 0%,rgba(22,27,20,.12) 35%,rgba(22,27,20,.55) 70%,rgba(22,27,20,.92) 100%)}
+.lights{position:absolute;top:0;left:0;right:0;height:70px;pointer-events:none;z-index:-1}
+.lights svg{width:100%;height:100%}
+.lights circle{fill:#FFD08A;filter:drop-shadow(0 0 6px #FFB347);animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.35}}
+.hero-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:40px;align-items:end}
+.hero .eyebrow{color:var(--ember-soft)}
+.hero h1{font-size:clamp(2.7rem,7vw,5.6rem);font-weight:800;margin:16px 0 20px}
+.hero h1 em{font-style:normal;color:var(--grass)}
+.hero p{font-size:1.15rem;max-width:48ch;color:rgba(251,248,241,.88)}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(251,248,241,.14);backdrop-filter:blur(6px);border:1px solid rgba(251,248,241,.22);font-size:.9rem;font-weight:600}
+.chip i{color:var(--ember)}
+.price-card{justify-self:end;background:var(--paper);color:var(--ink);border-radius:var(--radius);padding:26px;width:100%;max-width:340px;box-shadow:var(--shadow);animation:rise 1s .4s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}}
+.price-card .from{font-size:.85rem;color:var(--ink-soft);font-weight:600}
+.price-card .amount{font-family:var(--head);font-size:2.8rem;font-weight:800;line-height:1}
+.price-card .amount small{font-family:var(--body);font-size:1rem;font-weight:500;color:var(--ink-soft)}
+.price-card ul{list-style:none;margin:16px 0 20px;display:grid;gap:8px;font-size:.95rem}
+.price-card li{display:flex;gap:10px;align-items:center}
+.price-card li i{color:var(--moss);width:18px}
+.price-card .btn{width:100%}
+
+/* quick search bar */
+.quick{position:relative;z-index:5;margin-top:-62px}
+.quick form{background:var(--paper);border-radius:24px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;padding:10px}
+.qfield{display:flex;flex-direction:column;padding:10px 18px;border-radius:16px;transition:background .25s}
+.qfield:hover,.qfield:focus-within{background:var(--canvas)}
+.qfield label{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--moss)}
+.qfield label i{margin-right:6px;color:var(--ember)}
+.qfield input,.qfield select{border:0;background:transparent;font-size:1rem;font-weight:600;padding:4px 0;outline:none;width:100%}
+.quick .btn{border-radius:16px;padding:0 30px}
+
+/* facts */
+.facts{padding:60px 0 0}
+.facts-row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px 16px;text-align:center;transition:transform .35s var(--ease),border-color .35s}
+.fact:hover{transform:translateY(-5px);border-color:var(--grass)}
+.fact i{font-size:1.4rem;color:var(--moss);margin-bottom:10px}
+.fact strong{display:block;font-family:var(--head);font-size:1.15rem;font-weight:800}
+.fact span{font-size:.85rem;color:var(--ink-soft)}
+
+/* gallery */
+.gallery-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:40px;flex-wrap:wrap}
+.mosaic{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:14px}
+.tile{position:relative;overflow:hidden;border-radius:18px;cursor:zoom-in;border:0;padding:0;background:var(--ink)}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),opacity .4s}
+.tile::after{content:"\f00e";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;right:14px;bottom:14px;width:42px;height:42px;border-radius:50%;background:var(--paper);color:var(--ink);display:grid;place-items:center;opacity:0;transform:scale(.7);transition:.35s var(--ease)}
+.tile:hover img{transform:scale(1.07)}
+.tile:hover::after,.tile:focus-visible::after{opacity:1;transform:scale(1)}
+.t1{grid-column:span 2;grid-row:span 2}
+.t2{grid-row:span 2}
+.t5{grid-column:span 2}
+.t8{grid-column:span 2}
+
+/* lightbox */
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(14,17,12,.94);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.lightbox.open{opacity:1;visibility:visible}
+.lightbox img{max-width:min(92vw,1300px);max-height:82vh;border-radius:14px;transition:opacity .25s}
+.lb-btn{position:absolute;width:54px;height:54px;border-radius:50%;border:0;background:rgba(251,248,241,.12);color:var(--paper);font-size:1.2rem;cursor:pointer;transition:background .25s,transform .25s}
+.lb-btn:hover{background:var(--ember);color:var(--night)}
+.lb-prev{left:24px;top:50%;transform:translateY(-50%)}
+.lb-next{right:24px;top:50%;transform:translateY(-50%)}
+.lb-close{top:22px;right:24px}
+.lb-count{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:var(--paper);font-weight:600;font-size:.95rem;background:rgba(251,248,241,.12);padding:8px 16px;border-radius:999px}
+
+/* stay */
+.stay{background:var(--night);color:var(--paper);border-radius:40px;margin:0 14px;position:relative;overflow:hidden}
+.stay::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 20% 30%,#fff8,transparent),radial-gradient(1px 1px at 70% 15%,#fff7,transparent),radial-gradient(1.5px 1.5px at 85% 60%,#fff6,transparent),radial-gradient(1px 1px at 40% 80%,#fff6,transparent),radial-gradient(1px 1px at 10% 70%,#fff5,transparent),radial-gradient(1.2px 1.2px at 55% 45%,#fff5,transparent);pointer-events:none}
+.stay-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;position:relative}
+.stay-intro{position:sticky;top:120px;align-self:start}
+.stay .eyebrow{color:var(--grass)}
+.stay h2{margin:14px 0 20px}
+.stay .lead{color:rgba(251,248,241,.75)}
+.stay-quote{margin-top:30px;padding:20px 22px;border-left:4px solid var(--ember);background:rgba(251,248,241,.06);border-radius:0 16px 16px 0;font-size:1rem;color:rgba(251,248,241,.85)}
+.stay-quote cite{display:block;margin-top:8px;font-style:normal;font-weight:700;font-size:.85rem;color:var(--ember)}
+.stay-cards{display:grid;gap:18px}
+.scard{display:grid;grid-template-columns:60px 1fr;gap:20px;padding:28px;border-radius:var(--radius);background:rgba(251,248,241,.05);border:1px solid rgba(251,248,241,.1);transition:background .35s,transform .35s var(--ease),border-color .35s}
+.scard:hover{background:rgba(251,248,241,.09);transform:translateX(6px);border-color:rgba(139,164,70,.6)}
+.scard .ic{width:60px;height:60px;border-radius:18px;background:var(--grass);color:var(--night);display:grid;place-items:center;font-size:1.4rem}
+.scard:nth-child(2) .ic{background:var(--ember)}
+.scard:nth-child(3) .ic{background:var(--ember-soft)}
+.scard:nth-child(4) .ic{background:#B9C98A}
+.scard h3{margin-bottom:6px}
+.scard p{color:rgba(251,248,241,.72);font-size:.98rem}
+
+/* included */
+.inc-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;margin-top:44px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:34px}
+.panel h3{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.panel h3 i{color:var(--moss)}
+.ilist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+.ilist li{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:12px;transition:background .25s}
+.ilist li:hover{background:var(--canvas)}
+.ilist li i{color:var(--moss);margin-top:5px;width:18px;text-align:center}
+.panel.warn{background:var(--ember-soft);border-color:transparent}
+.panel.warn h3 i{color:var(--bark)}
+.wlist{list-style:none;display:grid;gap:14px}
+.wlist li{display:flex;gap:12px;font-size:.97rem}
+.wlist li i{color:var(--bark);margin-top:5px;width:18px;text-align:center}
+.wlist b{display:block}
+
+/* know */
+.know{background:var(--paper)}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);margin:44px 0 30px;position:relative}
+.timeline::before{content:"";position:absolute;top:31px;left:16%;right:16%;height:3px;background:repeating-linear-gradient(90deg,var(--grass) 0 10px,transparent 10px 18px)}
+.step{text-align:center;padding:0 14px;position:relative}
+.step .dot{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:var(--moss);color:var(--paper);display:grid;place-items:center;font-size:1.3rem;border:6px solid var(--paper);box-shadow:0 0 0 2px var(--grass);transition:transform .35s var(--ease)}
+.step:hover .dot{transform:scale(1.1) rotate(-6deg)}
+.step strong{display:block;font-family:var(--head);font-size:1.25rem;font-weight:800}
+.step span{color:var(--ink-soft);font-size:.95rem}
+.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.rule{display:flex;align-items:center;gap:14px;padding:18px;border-radius:16px;background:var(--canvas);transition:transform .3s var(--ease)}
+.rule:hover{transform:translateY(-3px)}
+.rule i{width:42px;height:42px;flex:none;border-radius:12px;background:var(--paper);display:grid;place-items:center;color:var(--moss)}
+.rule b{display:block;font-size:.95rem}
+.rule span{font-size:.85rem;color:var(--ink-soft)}
+.road-note{margin-top:22px;display:flex;gap:14px;align-items:flex-start;padding:18px 22px;border-radius:16px;border:1px dashed var(--bark);color:var(--bark);font-size:.95rem}
+
+/* reviews */
+.rev-head{display:grid;grid-template-columns:auto 1fr auto;gap:36px;align-items:end;margin-bottom:40px}
+.score{font-family:var(--head);font-weight:800;font-size:clamp(4rem,9vw,7rem);line-height:.85;color:var(--moss)}
+.score-sub{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:14px;font-family:var(--body);line-height:1.3}
+.score-sub .label{font-size:1rem;font-weight:600;color:var(--ink-soft)}
+.score-sub .count{display:inline-flex;align-items:center;gap:7px;background:var(--paper);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:700;color:var(--ink)}
+.score-sub .count i{color:var(--ember)}
+.rev-nav{display:flex;gap:10px}
+.rbtn{width:52px;height:52px;border-radius:50%;border:2px solid var(--line);background:var(--paper);cursor:pointer;transition:.3s var(--ease)}
+.rbtn:hover{background:var(--moss);color:var(--paper);border-color:var(--moss)}
+.rev-track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:6px}
+.rev-track::-webkit-scrollbar{display:none}
+.rcard{flex:0 0 min(360px,85%);scroll-snap-align:start;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:18px;transition:transform .35s var(--ease),box-shadow .35s}
+.rcard:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.rcard .stars{color:var(--ember);font-size:.9rem;letter-spacing:2px}
+.rcard p{font-size:1.05rem;flex:1}
+.who{display:flex;align-items:center;gap:12px}
+.av{width:44px;height:44px;border-radius:50%;background:var(--grass);color:var(--night);display:grid;place-items:center;font-weight:800;font-size:.9rem}
+.who b{display:block;font-size:.95rem}
+.who span{font-size:.82rem;color:var(--ink-soft)}
+.tag{display:inline-flex;gap:6px;align-items:center;font-size:.78rem;font-weight:700;color:var(--moss);background:rgba(139,164,70,.15);padding:4px 10px;border-radius:999px;align-self:flex-start}
+
+/* host + location */
+.hl-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px}
+.host{background:var(--moss);color:var(--paper);border-radius:32px;padding:40px;display:flex;flex-direction:column;gap:22px;position:relative;overflow:hidden}
+.host::after{content:"\f6bb";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;right:-20px;bottom:-40px;font-size:13rem;opacity:.07}
+.host-top{display:flex;gap:18px;align-items:center}
+.host-top img{width:84px;height:84px;border-radius:50%;object-fit:cover;border:4px solid var(--grass)}
+.host .eyebrow{color:var(--ember-soft)}
+.host h2{font-size:2.2rem;margin-top:4px}
+.badge-star{display:inline-flex;align-items:center;gap:8px;background:var(--ember);color:var(--night);padding:6px 12px;border-radius:999px;font-weight:700;font-size:.85rem;align-self:flex-start}
+.host p{color:rgba(251,248,241,.85)}
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hstats div{background:rgba(251,248,241,.1);border-radius:16px;padding:14px;text-align:center}
+.hstats b{display:block;font-family:var(--head);font-size:1.3rem}
+.hstats span{font-size:.8rem;color:rgba(251,248,241,.75)}
+.host .btn{align-self:flex-start}
+.loc{background:var(--paper);border:1px solid var(--line);border-radius:32px;overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.loc-info{padding:34px 34px 24px}
+.loc-info h2{font-size:2.2rem;margin:8px 0 12px}
+.drives{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.drives span{display:inline-flex;align-items:center;gap:8px;background:var(--canvas);padding:8px 14px;border-radius:999px;font-size:.9rem;font-weight:600}
+.drives i{color:var(--moss)}
+.loc iframe{width:100%;height:100%;min-height:280px;border:0;filter:saturate(.75) sepia(.12)}
+
+/* booking */
+.book{background:var(--night);color:var(--paper);margin:0 14px;border-radius:40px}
+.book-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:30px;align-items:start}
+.book .eyebrow{color:var(--grass)}
+.book h2{margin:12px 0 14px}
+.book .lead{color:rgba(251,248,241,.72);margin-bottom:34px}
+.bform{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.f{display:flex;flex-direction:column;gap:7px}
+.f.full{grid-column:1/-1}
+.f label{font-size:.85rem;font-weight:700;color:rgba(251,248,241,.8)}
+.f input,.f textarea,.f select{background:rgba(251,248,241,.06);border:1.5px solid rgba(251,248,241,.16);border-radius:14px;padding:14px 16px;color:var(--paper);transition:border-color .25s,background .25s;width:100%}
+.f input:focus,.f textarea:focus{outline:none;border-color:var(--grass);background:rgba(251,248,241,.1)}
+.f input::-webkit-calendar-picker-indicator{filter:invert(1)}
+.f textarea{min-height:110px;resize:vertical}
+.f .err{font-size:.82rem;color:#F2A57A;min-height:1em}
+.f.invalid input{border-color:#F2A57A}
+.stepper{display:flex;align-items:center;justify-content:space-between;background:rgba(251,248,241,.06);border:1.5px solid rgba(251,248,241,.16);border-radius:14px;padding:6px}
+.stepper button{width:44px;height:44px;border-radius:10px;border:0;background:rgba(251,248,241,.1);color:var(--paper);cursor:pointer;transition:background .25s}
+.stepper button:hover:not(:disabled){background:var(--grass);color:var(--night)}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper output{font-weight:700;font-size:1.05rem}
+.toggle{display:flex;gap:8px}
+.toggle label{flex:1;cursor:pointer}
+.toggle input{position:absolute;opacity:0;pointer-events:none}
+.toggle span{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:14px;border:1.5px solid rgba(251,248,241,.16);font-weight:600;transition:.25s}
+.toggle input:checked+span{background:var(--grass);color:var(--night);border-color:var(--grass)}
+.toggle input:focus-visible+span{outline:3px solid var(--ember);outline-offset:2px}
+.summary{position:sticky;top:110px;background:var(--paper);color:var(--ink);border-radius:28px;padding:28px;display:grid;gap:18px}
+.summary img{border-radius:18px;height:170px;width:100%;object-fit:cover}
+.summary h3{font-size:1.35rem}
+.sum-row{display:flex;justify-content:space-between;font-size:.97rem;color:var(--ink-soft)}
+.sum-row b{color:var(--ink)}
+.sum-total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:16px}
+.sum-total strong{font-family:var(--head);font-size:2rem;font-weight:800}
+.sum-note{font-size:.82rem;color:var(--ink-soft);display:flex;gap:8px}
+.summary .btn{width:100%}
+.success{display:none;text-align:center;padding:40px 20px}
+.success.show{display:block;animation:rise .6s var(--ease)}
+.success .big{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:var(--grass);color:var(--night);display:grid;place-items:center;font-size:2rem}
+.success p{color:rgba(251,248,241,.8);max-width:46ch;margin:10px auto 22px}
+
+/* footer */
+footer{padding:80px 0 30px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:40px;border-bottom:1px solid var(--line)}
+.foot-grid .logo{color:var(--ink);margin-bottom:14px}
+.foot-grid p{color:var(--ink-soft);font-size:.95rem;max-width:34ch}
+.foot-grid h4{font-family:var(--head);font-size:1.05rem;margin-bottom:14px}
+.foot-grid ul{list-style:none;display:grid;gap:9px}
+.foot-grid ul a,.foot-grid ul li{color:var(--ink-soft);font-size:.95rem;transition:color .25s}
+.foot-grid ul a:hover{color:var(--moss)}
+.foot-grid ul i{color:var(--moss);width:20px}
+.copy{text-align:center;padding-top:26px;color:var(--ink-soft);font-size:.9rem}
+
+/* mobile bar */
+.mbar{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:60;background:var(--night);color:var(--paper);border-radius:20px;padding:10px 10px 10px 20px;align-items:center;justify-content:space-between;box-shadow:var(--shadow);transform:translateY(130%);transition:transform .4s var(--ease)}
+.mbar.show{transform:none}
+.mbar b{font-family:var(--head);font-size:1.3rem}
+.mbar span{font-size:.85rem;color:rgba(251,248,241,.7)}
+.mbar .btn{padding:12px 20px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
+
+/* responsive */
+@media (max-width:1024px){
+  .facts-row{grid-template-columns:repeat(3,1fr)}
+  .rules{grid-template-columns:repeat(2,1fr)}
+  .stay-grid,.book-grid,.hl-grid,.inc-grid{grid-template-columns:1fr}
+  .stay-intro,.summary{position:static}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .nav-links{position:fixed;inset:0;background:var(--night);flex-direction:column;justify-content:center;gap:10px;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+  .nav-links.open{opacity:1;visibility:visible}
+  .nav-links a,.nav.scrolled .nav-links a{color:var(--paper);font-size:1.3rem}
+  .nav-links .btn{margin:14px 0 0}
+  .burger{display:grid;place-items:center;position:relative;z-index:2}
+  .burger.open{background:var(--ember);color:var(--night)}
+  .hero-grid{grid-template-columns:1fr}
+  .price-card{justify-self:start}
+  .hero{padding-bottom:120px}
+  .quick form{grid-template-columns:1fr 1fr}
+  .quick .btn{grid-column:1/-1;padding:16px}
+  .mosaic{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
+  .t1{grid-column:span 2}
+  .t2{grid-row:span 1}
+  .rev-head{grid-template-columns:1fr}
+  .timeline{grid-template-columns:1fr;gap:26px}
+  .timeline::before{display:none}
+  .mbar{display:flex}
+  section{padding:80px 0}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .wrap{width:calc(100% - 32px)}
+  .facts-row{grid-template-columns:repeat(2,1fr)}
+  .ilist,.rules,.bform{grid-template-columns:1fr}
+  .quick form{grid-template-columns:1fr}
+  .hstats{grid-template-columns:1fr 1fr 1fr}
+  .stay,.book{margin:0 8px;border-radius:28px}
+  .panel,.host,.loc-info{padding:26px}
+  .scard{grid-template-columns:1fr;padding:22px}
+  .foot-grid{grid-template-columns:1fr}
+  .lb-prev{left:8px}.lb-next{right:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="logo" aria-label="Grasshopper Acres home"><span class="mark"><i class="fa-solid fa-leaf"></i></span>Grasshopper Acres</a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i class="fa-solid fa-bars"></i></button>
+    <ul class="nav-links" id="menu">
+      <li><a href="#photos">Photos</a></li>
+      <li><a href="#stay">The Stay</a></li>
+      <li><a href="#know">Details</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#host">Host</a></li>
+      <li><a href="#book" class="btn btn-ember">Book Now</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"><img src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_1920,q_auto/v1767020318/land-photos/aul98ptpzuq2vzcduema/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="The bell tent at Grasshopper Acres set in open farm pasture" fetchpriority="high"></div>
+  <div class="lights" aria-hidden="true">
+    <svg viewBox="0 0 1200 70" preserveAspectRatio="none">
+      <path d="M0 10 Q150 60 300 18 T600 18 T900 18 T1200 10" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+      <g>
+        <circle cx="60" cy="27" r="4"/><circle cx="140" cy="38" r="4" style="animation-delay:.4s"/><circle cx="220" cy="33" r="4" style="animation-delay:.9s"/>
+        <circle cx="380" cy="30" r="4" style="animation-delay:.2s"/><circle cx="460" cy="38" r="4" style="animation-delay:1.2s"/><circle cx="540" cy="27" r="4" style="animation-delay:.6s"/>
+        <circle cx="680" cy="30" r="4" style="animation-delay:1.5s"/><circle cx="760" cy="38" r="4" style="animation-delay:.3s"/><circle cx="840" cy="27" r="4" style="animation-delay:1s"/>
+        <circle cx="980" cy="30" r="4" style="animation-delay:.7s"/><circle cx="1060" cy="36" r="4" style="animation-delay:1.3s"/><circle cx="1140" cy="22" r="4" style="animation-delay:.5s"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><i class="fa-solid fa-location-dot"></i> Cedarville, Maryland</span>
+      <h1>Sleep under canvas.<br>Wake up in the <em>pasture.</em></h1>
+      <p>A private, off grid bell tent on a quiet 10 acre farm. Wood stove inside, two fire pits outside, and dark skies full of stars. About an hour from DC and Baltimore.</p>
+      <div class="hero-badges">
+        <span class="chip"><i class="fa-solid fa-thumbs-up"></i> 100% recommend</span>
+        <span class="chip"><i class="fa-solid fa-star"></i> Star Host</span>
+        <span class="chip"><i class="fa-solid fa-paw"></i> Pets welcome</span>
+      </div>
+    </div>
+    <aside class="price-card" aria-label="Price overview">
+      <div class="from">Whole site, just for your group</div>
+      <div class="amount">$88 <small>/ night</small></div>
+      <ul>
+        <li><i class="fa-solid fa-users"></i> Up to 10 guests</li>
+        <li><i class="fa-solid fa-moon"></i> 1 night minimum</li>
+        <li><i class="fa-solid fa-fire"></i> Firewood included</li>
+      </ul>
+      <a href="#book" class="btn btn-moss">Reserve your dates <i class="fa-solid fa-arrow-right"></i></a>
+    </aside>
+  </div>
+</section>
+
+<!-- QUICK DATE BAR -->
+<div class="wrap quick">
+  <form id="quickForm" class="reveal" aria-label="Check availability">
+    <div class="qfield"><label for="qIn"><i class="fa-regular fa-calendar"></i>Check in</label><input type="date" id="qIn"></div>
+    <div class="qfield"><label for="qOut"><i class="fa-regular fa-calendar-check"></i>Check out</label><input type="date" id="qOut"></div>
+    <div class="qfield"><label for="qGuests"><i class="fa-solid fa-user-group"></i>Guests</label>
+      <select id="qGuests"></select>
+    </div>
+    <button type="submit" class="btn btn-ember"><i class="fa-solid fa-magnifying-glass"></i> Check availability</button>
+  </form>
+</div>
+
+<!-- FACTS -->
+<div class="facts">
+  <div class="wrap facts-row">
+    <div class="fact reveal"><i class="fa-solid fa-users"></i><strong>10 guests</strong><span>Whole site private</span></div>
+    <div class="fact reveal d1"><i class="fa-solid fa-bed"></i><strong>4 beds</strong><span>Cots with bedding</span></div>
+    <div class="fact reveal d2"><i class="fa-solid fa-tractor"></i><strong>10 acres</strong><span>Working farm</span></div>
+    <div class="fact reveal d3"><i class="fa-solid fa-fire-burner"></i><strong>Wood stove</strong><span>Cozy all year</span></div>
+    <div class="fact reveal d4"><i class="fa-solid fa-solar-panel"></i><strong>Solar power</strong><span>Fully off grid</span></div>
+    <div class="fact reveal d5"><i class="fa-solid fa-star-and-crescent"></i><strong>Dark skies</strong><span>Great stargazing</span></div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section id="photos">
+  <div class="wrap">
+    <div class="gallery-head reveal">
+      <div>
+        <span class="eyebrow"><i class="fa-solid fa-camera"></i> Take a look around</span>
+        <h2 style="margin-top:12px">Your camp, your pasture</h2>
+      </div>
+      <p class="lead">Tap any photo to view it full size. Use the arrows or swipe to browse.</p>
+    </div>
+    <div class="mosaic" id="mosaic">
+      <button class="tile t1 reveal" data-i="0"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_1200,q_auto/v1767020320/land-photos/sdwzeeuzwnfvfwy9cbfn/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 1"></button>
+      <button class="tile t2 reveal d1" data-i="1"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_900,q_auto/v1767020323/land-photos/zk0v3adqbm294ekhpfbv/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 2"></button>
+      <button class="tile t3 reveal d2" data-i="2"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_900,q_auto/v1767020318/land-photos/o5flvuj8qhbetjs1wqx6/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 3"></button>
+      <button class="tile t4 reveal d3" data-i="3"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_900,q_auto/v1767020317/land-photos/xvcvxmdhdznjrmrvx126/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 4"></button>
+      <button class="tile t5 reveal" data-i="4"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_1200,q_auto/v1767020304/land-photos/dgvs8l5b284vwuplxerk/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 5"></button>
+      <button class="tile t6 reveal d1" data-i="5"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_900,q_auto/v1767020320/land-photos/yo6vkujqqdt4gyzndpdl/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 6"></button>
+      <button class="tile t7 reveal d2" data-i="6"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_900,q_auto/v1767020302/land-photos/toecwej7hmcvpfah0czu/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 7"></button>
+      <button class="tile t8 reveal d3" data-i="7"><img loading="lazy" src="https://dxynby2r8cy0b.cloudfront.net/images/f_auto,c_limit,w_1200,q_auto/v1767020305/land-photos/dpkebsrteqtcfsfzjhlp/grasshopper-acres-off-grid-bell-tent-farm-stay.jpg" alt="Grasshopper Acres campsite photo 8"></button>
+    </div>
+  </div>
+</section>
+
+<!-- THE STAY -->
+<section class="stay" id="stay">
+  <div class="wrap stay-grid">
+    <div class="stay-intro reveal">
+      <span class="eyebrow"><i class="fa-solid fa-campground"></i> The stay</span>
+      <h2>Everything is set up. Just bring your people.</h2>
+      <p class="lead">No pitching tents, no hauling gear. Arrive to a ready camp on the quiet six acre side of the farm, with open pasture in front and woods behind.</p>
+      <blockquote class="stay-quote">"A complete exhale, and exactly what I needed."<cite>Natalie G., June 2026</cite></blockquote>
+    </div>
+    <div class="stay-cards">
+      <article class="scard reveal">
+        <div class="ic"><i class="fa-solid fa-tent"></i></div>
+        <div><h3>A roomy four season bell tent</h3><p>A 6 meter canvas tent with sturdy cots and bedding provided. The indoor wood stove keeps it warm and cozy on cool nights, so it works in every season.</p></div>
+      </article>
+      <article class="scard reveal d1">
+        <div class="ic"><i class="fa-solid fa-fire"></i></div>
+        <div><h3>Fire pits and an outdoor kitchen</h3><p>Two fire pits, a BBQ grill and a cooking area for full meals. Pots, pans, utensils and dishes are all there, plus firewood at a wood station near camp.</p></div>
+      </article>
+      <article class="scard reveal d2">
+        <div class="ic"><i class="fa-solid fa-toilet-paper"></i></div>
+        <div><h3>A private, spotless outhouse</h3><p>Your own wooden outhouse with a composting toilet and a foot pump sink. Guests keep calling it the cleanest camp bathroom they have seen.</p></div>
+      </article>
+      <article class="scard reveal d3">
+        <div class="ic"><i class="fa-solid fa-binoculars"></i></div>
+        <div><h3>Open land and starry nights</h3><p>Flat, wide pasture with little light pollution. 300 feet of soft string lights frame camp at night, and deer, owls and birds visit from the woods.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- INCLUDED -->
+<section id="included">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow"><i class="fa-solid fa-basket-shopping"></i> What's included</span>
+      <h2 style="margin-top:12px">Pack light. It's all here.</h2>
+    </div>
+    <div class="inc-grid">
+      <div class="panel reveal">
+        <h3><i class="fa-solid fa-circle-check"></i> Provided for you</h3>
+        <ul class="ilist">
+          <li><i class="fa-solid fa-bed"></i>Cots with sheets and blankets</li>
+          <li><i class="fa-solid fa-fire-burner"></i>Indoor wood stove</li>
+          <li><i class="fa-solid fa-tree"></i>Firewood, ready to burn</li>
+          <li><i class="fa-solid fa-fire"></i>Two fire pits</li>
+          <li><i class="fa-solid fa-drumstick-bite"></i>BBQ and fire pit grill</li>
+          <li><i class="fa-solid fa-utensils"></i>Cookware, dishes and cutlery</li>
+          <li><i class="fa-solid fa-bottle-water"></i>5 gallons of drinking water</li>
+          <li><i class="fa-solid fa-chair"></i>Outdoor chairs and tables</li>
+          <li><i class="fa-solid fa-lightbulb"></i>300 ft of string lights</li>
+          <li><i class="fa-solid fa-recycle"></i>Trash, recycling and compost bins</li>
+        </ul>
+      </div>
+      <div class="panel warn reveal d1">
+        <h3><i class="fa-solid fa-circle-info"></i> Good to know before you pack</h3>
+        <ul class="wlist">
+          <li><i class="fa-solid fa-shower"></i><div><b>No showers yet</b>A washroom is being built and opens in spring.</div></li>
+          <li><i class="fa-solid fa-wifi"></i><div><b>No wifi</b>A true digital detox. Download maps before you arrive.</div></li>
+          <li><i class="fa-solid fa-jug-detergent"></i><div><b>Bring extra water</b>Drinking water is provided, but extra is always handy.</div></li>
+          <li><i class="fa-solid fa-umbrella-beach"></i><div><b>Summer shade</b>Camp is in open pasture, so a sunshade helps on hot days.</div></li>
+          <li><i class="fa-solid fa-dog"></i><div><b>Pets are welcome</b>The land is unfenced and borders the woods, so keep pups leashed.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THINGS TO KNOW -->
+<section class="know" id="know">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center">
+      <span class="eyebrow"><i class="fa-solid fa-clipboard-list"></i> Your stay, step by step</span>
+      <h2 style="margin-top:12px">Simple from start to finish</h2>
+    </div>
+    <div class="timeline">
+      <div class="step reveal"><div class="dot"><i class="fa-solid fa-key"></i></div><strong>Check in 2 PM to 10 PM</strong><span>Early check in may be available</span></div>
+      <div class="step reveal d1"><div class="dot"><i class="fa-solid fa-handshake"></i></div><strong>Meet your host</strong><span>Joshua shows you around camp</span></div>
+      <div class="step reveal d2"><div class="dot"><i class="fa-solid fa-sun"></i></div><strong>Check out by 12 PM</strong><span>Late check out may be available</span></div>
+    </div>
+    <div class="rules">
+      <div class="rule reveal"><i class="fa-solid fa-moon"></i><div><b>1 night minimum</b><span>Perfect for a quick escape</span></div></div>
+      <div class="rule reveal d1"><i class="fa-solid fa-calendar-days"></i><div><b>Book 12 months out</b><span>Plan ahead with ease</span></div></div>
+      <div class="rule reveal d2"><i class="fa-solid fa-rotate-left"></i><div><b>Moderate cancellation</b><span>Flexible if plans change</span></div></div>
+      <div class="rule reveal d3"><i class="fa-solid fa-square-parking"></i><div><b>Park at the site</b><span>Up to 10 vehicles</span></div></div>
+      <div class="rule reveal"><i class="fa-solid fa-car-side"></i><div><b>2WD accessible</b><span>No special vehicle needed</span></div></div>
+      <div class="rule reveal d1"><i class="fa-solid fa-wheelchair"></i><div><b>Wheelchair access</b><span>Flat, open ground</span></div></div>
+      <div class="rule reveal d2"><i class="fa-solid fa-fire-flame-curved"></i><div><b>Campfires allowed</b><span>Wood provided</span></div></div>
+      <div class="rule reveal d3"><i class="fa-solid fa-leaf"></i><div><b>Leave it better</b><span>Respect the land and host rules</span></div></div>
+    </div>
+    <div class="road-note reveal"><i class="fa-solid fa-road" style="margin-top:4px"></i><div><b>Heads up on the drive in:</b> the farm is a few miles off the main road, and the last stretch gets narrow and less paved. Arrive in daylight if you can. Any car can make it.</div></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="wrap">
+    <div class="rev-head reveal">
+      <div><div class="score">100%</div><div class="score-sub"><span class="label">of guests recommend this stay</span><span class="count"><i class="fa-solid fa-star"></i> 15 ratings</span></div></div>
+      <div>
+        <span class="eyebrow"><i class="fa-solid fa-comment-dots"></i> Guest reviews</span>
+        <h2 style="margin-top:12px">Loved by every guest so far</h2>
+      </div>
+      <div class="rev-nav">
+        <button class="rbtn" id="revPrev" aria-label="Previous reviews"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="rbtn" id="revNext" aria-label="Next reviews"><i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+    <div class="rev-track" id="revTrack">
+      <article class="rcard"><div class="stars">★★★★★</div><p>"The best camping place I've ever stayed in. It literally has everything you need."</p><span class="tag"><i class="fa-solid fa-palette"></i> Creative escape</span><div class="who"><div class="av">AB</div><div><b>Abril B.</b><span>June 2026</span></div></div></article>
+      <article class="rcard"><div class="stars">★★★★★</div><p>"A very quick drive from DC or Baltimore. The camp is exactly as described."</p><span class="tag"><i class="fa-solid fa-city"></i> City getaway</span><div class="who"><div class="av">BK</div><div><b>Beth K.</b><span>October 2026</span></div></div></article>
+      <article class="rcard"><div class="stars">★★★★★</div><p>"Best outhouse at a glamping site I've seen yet!"</p><span class="tag"><i class="fa-solid fa-paw"></i> With pets</span><div class="who"><div class="av">MS</div><div><b>Mary Cate S.</b><span>May 2026</span></div></div></article>
+      <article class="rcard"><div class="stars">★★★★★</div><p>"It rained all weekend, but we had more than enough space inside the tent."</p><span class="tag"><i class="fa-solid fa-cloud-rain"></i> Rainy weekend</span><div class="who"><div class="av">RW</div><div><b>Rachael W.</b><span>May 2026</span></div></div></article>
+      <article class="rcard"><div class="stars">★★★★★</div><p>"We loved it! Very clean and had everything we needed. We plan to return."</p><span class="tag"><i class="fa-solid fa-child"></i> With kids</span><div class="who"><div class="av">OS</div><div><b>Orlando S.</b><span>June 2026</span></div></div></article>
+      <article class="rcard"><div class="stars">★★★★★</div><p>"Everything you need, making a quick weekend camping trip a breeze."</p><span class="tag"><i class="fa-solid fa-people-group"></i> Group trip</span><div class="who"><div class="av">JH</div><div><b>Jordyn H.</b><span>September 2026</span></div></div></article>
+      <article class="rcard"><div class="stars">★★★★★</div><p>"Site is very dog friendly. My boy and I had such an amazing time!"</p><span class="tag"><i class="fa-solid fa-dog"></i> Dog friendly</span><div class="who"><div class="av">CC</div><div><b>Cierra C.</b><span>April 2026</span></div></div></article>
+      <article class="rcard"><div class="stars">★★★★★</div><p>"Josh went above and beyond. Great service, great place!"</p><span class="tag"><i class="fa-solid fa-heart"></i> Peaceful</span><div class="who"><div class="av">YC</div><div><b>Yassine C.</b><span>March 2026</span></div></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- HOST + LOCATION -->
+<section id="host" style="padding-top:0">
+  <div class="wrap hl-grid">
+    <div class="host reveal">
+      <div class="host-top">
+        <img src="https://hipcamp-res.cloudinary.com/image/upload/c_fill,f_auto,h_200,w_200/v1767023094/profile/wxxesbejd5vvpfuwfs1w.jpg" alt="Joshua, your host">
+        <div><span class="eyebrow">Your host</span><h2>Joshua H.</h2></div>
+      </div>
+      <span class="badge-star"><i class="fa-solid fa-medal"></i> Star Host</span>
+      <p>Joshua meets every group on arrival to walk you through camp and make sure you have everything. Guests describe him as kind, helpful and quick to answer questions, even helping plan their itinerary.</p>
+      <div class="hstats">
+        <div><b>100%</b><span>Response rate</span></div>
+        <div><b>&lt; 3 hrs</b><span>Response time</span></div>
+        <div><b>2025</b><span>Hosting since</span></div>
+      </div>
+      <a href="#book" class="btn btn-ember" id="msgHost"><i class="fa-regular fa-envelope"></i> Message Joshua</a>
+    </div>
+    <div class="loc reveal d1">
+      <div class="loc-info">
+        <span class="eyebrow"><i class="fa-solid fa-map-location-dot"></i> Location</span>
+        <h2>Cedarville, MD</h2>
+        <p style="color:var(--ink-soft)">Prince George's County, minutes from Cedarville State Forest, rivers and trails. The exact address is shared after booking.</p>
+        <div class="drives">
+          <span><i class="fa-solid fa-landmark-dome"></i> DC about 1 hr</span>
+          <span><i class="fa-solid fa-city"></i> Baltimore about 1 hr</span>
+          <span><i class="fa-solid fa-sailboat"></i> Annapolis, easy drive</span>
+          <span><i class="fa-solid fa-person-hiking"></i> State forest nearby</span>
+        </div>
+      </div>
+      <iframe title="Map of Cedarville, Maryland" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Cedarville%20State%20Forest%2C%20Maryland&z=11&output=embed"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="book" id="book">
+  <div class="wrap book-grid">
+    <div>
+      <div id="formWrap">
+        <span class="eyebrow"><i class="fa-solid fa-calendar-plus"></i> Request to book</span>
+        <h2>Pick your dates. We'll handle the rest.</h2>
+        <p class="lead">Send a request and Joshua will confirm availability, usually within three hours.</p>
+        <form class="bform" id="bookForm" novalidate>
+          <div class="f"><label for="bIn">Check in</label><input type="date" id="bIn" required><span class="err"></span></div>
+          <div class="f"><label for="bOut">Check out</label><input type="date" id="bOut" required><span class="err"></span></div>
+          <div class="f"><label id="gLabel">Guests</label>
+            <div class="stepper" role="group" aria-labelledby="gLabel">
+              <button type="button" id="gMinus" aria-label="Fewer guests"><i class="fa-solid fa-minus"></i></button>
+              <output id="gCount" aria-live="polite">2 guests</output>
+              <button type="button" id="gPlus" aria-label="More guests"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <span class="err"></span>
+          </div>
+          <div class="f"><label>Bringing pets?</label>
+            <div class="toggle">
+              <label><input type="radio" name="pets" value="No" checked><span><i class="fa-solid fa-xmark"></i> No</span></label>
+              <label><input type="radio" name="pets" value="Yes"><span><i class="fa-solid fa-paw"></i> Yes</span></label>
+            </div>
+            <span class="err"></span>
+          </div>
+          <div class="f"><label for="bName">Full name</label><input type="text" id="bName" autocomplete="name" placeholder="Your name" required><span class="err"></span></div>
+          <div class="f"><label for="bEmail">Email</label><input type="email" id="bEmail" autocomplete="email" placeholder="you@example.com" required><span class="err"></span></div>
+          <div class="f full"><label for="bPhone">Phone (optional)</label><input type="tel" id="bPhone" autocomplete="tel" placeholder="(555) 123 4567"><span class="err"></span></div>
+          <div class="f full"><label for="bMsg">Message for Joshua (optional)</label><textarea id="bMsg" placeholder="Tell us about your trip, arrival time or any questions."></textarea></div>
+          <div class="f full"><button type="submit" class="btn btn-ember" style="padding:17px"><i class="fa-solid fa-paper-plane"></i> Send booking request</button></div>
+        </form>
+      </div>
+      <div class="success" id="success" role="status" aria-live="polite">
+        <div class="big"><i class="fa-solid fa-check"></i></div>
+        <h2>Request sent!</h2>
+        <p id="successText">Thanks! Joshua will reply soon to confirm your stay.</p>
+        <button class="btn btn-ghost" id="again" style="color:var(--paper);border-color:rgba(251,248,241,.3)"><i class="fa-solid fa-rotate-left"></i> Make another request</button>
+      </div>
+    </div>
+
+    <aside class="summary reveal" aria-label="Stay summary">
+      <h3><i class="fa-solid fa-tent" style="color:var(--moss)"></i> Off Grid Bell Tent</h3>
+      <div class="sum-row"><span>Dates</span><b id="sDates">Select dates</b></div>
+      <div class="sum-row"><span>Guests</span><b id="sGuests">2 guests</b></div>
+      <div class="sum-row"><span id="sCalc">$88 × 0 nights</span><b id="sSub">$0</b></div>
+      <div class="sum-total"><span>Estimated total</span><strong id="sTotal">$0</strong></div>
+      <div class="sum-note"><i class="fa-solid fa-circle-info" style="margin-top:3px"></i>No charge yet. Final price, taxes and fees are confirmed by your host.</div>
+      <a href="#book" class="btn btn-moss" id="sumGo"><i class="fa-solid fa-pen"></i> Complete your request</a>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="#top" class="logo"><span class="mark"><i class="fa-solid fa-leaf"></i></span>Grasshopper Acres</a>
+        <p>An off grid bell tent farm stay in Cedarville, Maryland. Slow down, light a fire and watch the stars.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul><li><a href="#photos">Photos</a></li><li><a href="#stay">The Stay</a></li><li><a href="#included">What's Included</a></li><li><a href="#reviews">Reviews</a></li></ul>
+      </div>
+      <div>
+        <h4>Plan</h4>
+        <ul><li><a href="#know">Check in and out</a></li><li><a href="#host">Your host</a></li><li><a href="#host">Location</a></li><li><a href="#book">Book now</a></li></ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><i class="fa-solid fa-user"></i> Hosted by Joshua H.</li>
+          <li><i class="fa-solid fa-location-dot"></i> Cedarville, MD</li>
+          <li><i class="fa-regular fa-clock"></i> Replies within 3 hours</li>
+          <li><a href="#book"><i class="fa-regular fa-envelope"></i> Send a message</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="copy">&copy; <span id="yr"></span> Grasshopper Acres. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- MOBILE BAR -->
+<div class="mbar" id="mbar">
+  <div><b>$88</b> <span>/ night · sleeps 10</span></div>
+  <a href="#book" class="btn btn-ember">Book now</a>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo"><i class="fa-solid fa-chevron-left"></i></button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next photo"><i class="fa-solid fa-chevron-right"></i></button>
+  <div class="lb-count" id="lbCount"></div>
+</div>
+
+<script>
+(function(){
+  const PRICE = 88, MAX_GUESTS = 10;
+  const $ = s => document.querySelector(s);
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* nav */
+  const nav = $('#nav'), mbar = $('#mbar');
+  const onScroll = () => {
+    nav.classList.toggle('scrolled', scrollY > 40);
+    const book = $('#book').getBoundingClientRect();
+    mbar.classList.toggle('show', scrollY > innerHeight * .6 && (book.top > innerHeight || book.bottom < 0));
+  };
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  const burger = $('#burger'), menu = $('#menu');
+  const setMenu = open => {
+    menu.classList.toggle('open', open); burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+    burger.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  burger.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+  /* reveal */
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* dates */
+  const iso = d => { const z = new Date(d.getTime() - d.getTimezoneOffset()*60000); return z.toISOString().slice(0,10); };
+  const today = new Date(); today.setHours(0,0,0,0);
+  const maxD = new Date(today); maxD.setFullYear(maxD.getFullYear() + 1);
+  const minStr = iso(today), maxStr = iso(maxD);
+  const dateInputs = ['#qIn','#qOut','#bIn','#bOut'].map(s => $(s));
+  dateInputs.forEach(i => { i.min = minStr; i.max = maxStr; });
+  const linkOut = (inEl, outEl) => inEl.addEventListener('change', () => {
+    if (!inEl.value) return;
+    const next = new Date(inEl.value + 'T00:00'); next.setDate(next.getDate() + 1);
+    outEl.min = iso(next);
+    if (!outEl.value || outEl.value <= inEl.value) outEl.value = iso(next);
+    update();
+  });
+  linkOut($('#qIn'), $('#qOut')); linkOut($('#bIn'), $('#bOut'));
+
+  /* guests */
+  const qG = $('#qGuests');
+  for (let i = 1; i <= MAX_GUESTS; i++) qG.add(new Option(i + (i === 1 ? ' guest' : ' guests'), i, i === 2, i === 2));
+  let guests = 2;
+  const gLabel = n => n + (n === 1 ? ' guest' : ' guests');
+  const setGuests = n => {
+    guests = Math.min(MAX_GUESTS, Math.max(1, n));
+    $('#gCount').textContent = gLabel(guests);
+    $('#gMinus').disabled = guests <= 1; $('#gPlus').disabled = guests >= MAX_GUESTS;
+    update();
+  };
+  $('#gMinus').addEventListener('click', () => setGuests(guests - 1));
+  $('#gPlus').addEventListener('click', () => setGuests(guests + 1));
+
+  /* summary */
+  const fmt = d => new Date(d + 'T00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'});
+  const nightsOf = () => {
+    const a = $('#bIn').value, b = $('#bOut').value;
+    if (!a || !b) return 0;
+    return Math.max(0, Math.round((new Date(b) - new Date(a)) / 864e5));
+  };
+  function update(){
+    const n = nightsOf();
+    $('#sDates').textContent = n ? fmt($('#bIn').value) + ' to ' + fmt($('#bOut').value) : 'Select dates';
+    $('#sGuests').textContent = gLabel(guests);
+    $('#sCalc').textContent = '$' + PRICE + ' × ' + n + (n === 1 ? ' night' : ' nights');
+    $('#sSub').textContent = '$' + (PRICE * n).toLocaleString();
+    $('#sTotal').textContent = '$' + (PRICE * n).toLocaleString();
+  }
+  ['#bIn','#bOut'].forEach(s => $(s).addEventListener('change', update));
+  setGuests(2);
+
+  /* quick bar -> booking form */
+  $('#quickForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if ($('#qIn').value) $('#bIn').value = $('#qIn').value;
+    if ($('#qOut').value) $('#bOut').value = $('#qOut').value;
+    if ($('#bIn').value){ const n = new Date($('#bIn').value + 'T00:00'); n.setDate(n.getDate()+1); $('#bOut').min = iso(n); }
+    setGuests(+qG.value);
+    $('#book').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    setTimeout(() => ($('#bIn').value ? $('#bName') : $('#bIn')).focus({preventScroll:true}), 700);
+  });
+  $('#msgHost').addEventListener('click', () => setTimeout(() => $('#bMsg').focus({preventScroll:true}), 700));
+
+  /* validation */
+  const setErr = (el, msg) => { const f = el.closest('.f'); f.classList.toggle('invalid', !!msg); f.querySelector('.err').textContent = msg || ''; return !msg; };
+  function validate(){
+    let ok = true;
+    const a = $('#bIn').value, b = $('#bOut').value;
+    ok = setErr($('#bIn'), !a ? 'Please choose a check in date.' : (a < minStr ? 'Check in cannot be in the past.' : (a > maxStr ? 'Bookings open up to 12 months ahead.' : ''))) && ok;
+    ok = setErr($('#bOut'), !b ? 'Please choose a check out date.' : (a && b <= a ? 'Check out must be after check in.' : '')) && ok;
+    ok = setErr($('#bName'), $('#bName').value.trim().length < 2 ? 'Please enter your name.' : '') && ok;
+    ok = setErr($('#bEmail'), /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('#bEmail').value.trim()) ? '' : 'Please enter a valid email.') && ok;
+    return ok;
+  }
+  ['#bIn','#bOut','#bName','#bEmail'].forEach(s => $(s).addEventListener('input', () => { if ($(s).closest('.f').classList.contains('invalid')) validate(); }));
+
+  $('#bookForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!validate()){ const bad = document.querySelector('.f.invalid input'); bad && bad.focus(); return; }
+    const n = nightsOf();
+    const pets = document.querySelector('input[name="pets"]:checked').value === 'Yes' ? ', with pets' : '';
+    $('#successText').textContent = 'Thanks, ' + $('#bName').value.trim().split(' ')[0] + '! Your request for ' + n + (n === 1 ? ' night' : ' nights') + ' (' + fmt($('#bIn').value) + ' to ' + fmt($('#bOut').value) + ', ' + gLabel(guests) + pets + ') is on its way. Joshua will reply to ' + $('#bEmail').value.trim() + ' to confirm.';
+    $('#formWrap').style.display = 'none';
+    $('#success').classList.add('show');
+    $('#book').scrollIntoView({behavior:'smooth'});
+  });
+  $('#again').addEventListener('click', () => {
+    $('#bookForm').reset(); setGuests(2); update();
+    $('#success').classList.remove('show'); $('#formWrap').style.display = '';
+    $('#bIn').focus();
+  });
+
+  /* reviews */
+  const track = $('#revTrack');
+  const step = () => track.querySelector('.rcard').offsetWidth + 18;
+  $('#revPrev').addEventListener('click', () => track.scrollBy({left:-step(), behavior:'smooth'}));
+  $('#revNext').addEventListener('click', () => track.scrollBy({left:step(), behavior:'smooth'}));
+
+  /* lightbox */
+  const tiles = [...document.querySelectorAll('.tile')];
+  const srcs = tiles.map(t => t.querySelector('img').src.replace(/w_\d+/, 'w_1800'));
+  const lb = $('#lightbox'), lbImg = $('#lbImg');
+  let cur = 0, lastFocus = null;
+  const show = i => {
+    cur = (i + srcs.length) % srcs.length;
+    lbImg.style.opacity = 0;
+    setTimeout(() => { lbImg.src = srcs[cur]; lbImg.alt = tiles[cur].querySelector('img').alt; }, 150);
+    lbImg.onload = () => lbImg.style.opacity = 1;
+    $('#lbCount').textContent = (cur + 1) + ' / ' + srcs.length;
+  };
+  const open = i => { lastFocus = document.activeElement; show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; $('#lbClose').focus(); };
+  const close = () => { lb.classList.remove('open'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); };
+  tiles.forEach((t, i) => t.addEventListener('click', () => open(i)));
+  $('#lbClose').addEventListener('click', close);
+  $('#lbPrev').addEventListener('click', () => show(cur - 1));
+  $('#lbNext').addEventListener('click', () => show(cur + 1));
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) { if (e.key === 'Escape' && menu.classList.contains('open')) setMenu(false); return; }
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+  let sx = 0;
+  lb.addEventListener('touchstart', e => sx = e.touches[0].clientX, {passive:true});
+  lb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); });
+})();
+</script>
+</body>
+</html>
